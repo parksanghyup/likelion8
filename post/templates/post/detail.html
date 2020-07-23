@@ -3,6 +3,7 @@
 </div>
 
 <h1>{{post.title}}</h1>
+<div>카테고리 : {{post.category}}</div>
 <div>작성시간 : {{post.created_at|date:'Y.m.d H:i:s'}}</div>
 <!-- 참고 https://ssungkang.tistory.com/entry/DjangoDate%EC%99%80-Time%EC%9D%84-%EB%82%98%ED%83%80%EB%82%B4%EB%8A%94-template-filter -->
 <div>수정시간 : {{post.updated_at}}</div>
@@ -10,6 +11,17 @@
     <a href="{% url 'post_edit' post.pk %}">수정</a>
     <a href="{% url 'post_delete' post.pk %}">삭제</a>
 </div>
-<div style="padding-top: 50px;">
+<div style="padding-top: 50px; padding-bottom: 50px;">
     {{post.content}}
 </div>
+<hr>
+
+
+<form action="{% url 'comment_new' post.pk %}" method="post" style="margin-top:50px">
+    {% csrf_token %}
+    {{commentForm}}
+    <input type="submit">
+</form>
+{% for comment in post.comment_set.all %}
+<h4>{{comment.content|linebreaks}} [작성자:{{comment.author}}]</h4>
+{% endfor %}
